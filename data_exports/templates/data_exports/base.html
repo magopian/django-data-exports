@@ -1,0 +1,17 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% trans "Data export" %}{% endblock title %}</title>
+    {% block css %}{% endblock css %}
+    {% block meta %}<meta charset="utf-8" />{% endblock meta %}
+    {% block extrahead %}{% endblock extrahead %}
+</head>
+
+<body>
+    {% block body %}{% endblock body %}
+    {% block js %}{% endblock js %}
+</body>
+</html>
+
+

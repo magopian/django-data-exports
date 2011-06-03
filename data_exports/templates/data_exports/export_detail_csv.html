@@ -1,0 +1,3 @@
+{% load getter_tags %}{% if export.display_labels %}{% for column in export.column_set.all %}{{ column.label }};{% endfor %}{% endif %}
+{% for obj in data %}{% for column in export.column_set.all %}"{{ obj|getattribute:column.column }}";{% endfor %}
+{% endfor %}

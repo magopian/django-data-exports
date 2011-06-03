@@ -1,0 +1,27 @@
+{% extends "data_exports/base.html" %}
+{% load getter_tags %}
+
+{% block body %}
+<h1>{{ export }}</h1>
+
+<table>
+{% if export.display_labels %}
+    <thead>
+        <tr>
+        {% for column in export.column_set.all %}
+            <th>{{ column.label }}</th>
+        {% endfor %}
+        </tr>
+    </thead>
+{% endif %}
+    <tbody>
+    {% for obj in data %}
+        <tr>
+        {% for column in export.column_set.all %}
+            <td>{{ obj|getattribute:column.column }}</td>
+        {% endfor %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock body %}
