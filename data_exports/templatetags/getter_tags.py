@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from django import template
-from django.utils.safestring import mark_safe
 
 
 register = template.Library()
@@ -14,3 +13,10 @@ def getattribute(model, item):
 @register.filter()
 def getvalue(dictionary, item):
     return dictionary.get(item)
+
+@register.filter()
+def nice_display(item):
+    if hasattr(item, 'all'): # RelatedManager, display a list
+        return ', '.join(map(unicode, item.all()))
+    return item
+

@@ -16,7 +16,7 @@
     {% for obj in data %}
         <tr>
         {% for column in export.column_set.all %}
-            <td>{{ obj|getattribute:column.column }}</td>
+            <td>{{ obj|getattribute:column.column|nice_display }}</td>
         {% endfor %}
         </tr>
     {% endfor %}
