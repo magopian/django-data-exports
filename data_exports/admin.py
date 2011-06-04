@@ -34,8 +34,8 @@ class ColumnInline(admin.TabularInline):
 
 class ExportAdmin(admin.ModelAdmin):
     inlines = [ColumnInline]
-    list_display = ['name', 'slug', 'model', 'display_labels', 'export_format']
-    list_filter = ['display_labels', 'export_format', 'model']
+    list_display = ['name', 'slug', 'model', 'export_format']
+    list_filter = ['export_format', 'model']
     prepopulated_fields = {"slug": ("name",)}
     readonly_fields = ['model']
     search_fields = ['name', 'slug', 'model']

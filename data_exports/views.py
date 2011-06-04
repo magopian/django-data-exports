@@ -16,16 +16,11 @@ class ExportView(DetailView):
         return context
 
     def render_to_response(self, context, **kwargs):
-        mimetype = 'text/html'
+        resp = super(ExportView, self).render_to_response(context, **kwargs)
         export_format = self.object.export_format
         if export_format:
-            mimetype = export_format.mime
-        resp = super(ExportView, self).render_to_response(
-                context,
-                content_type=mimetype,
-                **kwargs)
-        if export_format and export_format.attachment:
             filename = '%s.%s' % (self.object.slug, export_format.name)
+            resp['Content-Type'] = export_format.mime
             resp['Content-Disposition'] = 'attachment; filename=%s' % filename
         return resp
 
@@ -33,7 +28,7 @@ class ExportView(DetailView):
         template_names = super(ExportView, self).get_template_names(**kwargs)
         export_format = self.object.export_format
         if export_format:
-            return [export_format.template]
+            template_names.insert(0, export_format.template)
         return template_names
 
 export_view = ExportView.as_view()

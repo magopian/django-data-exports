@@ -8,8 +8,8 @@ from django.utils.translation import ugettext_lazy as _
 
 class Format(models.Model):
     name = models.CharField(max_length=50)
+    file_ext = models.CharField( max_length=10, blank=True)
     mime = models.CharField(max_length=50)
-    attachment = models.BooleanField(default=True)
     template = models.CharField(max_length=255)
 
 
@@ -23,9 +23,12 @@ class Format(models.Model):
 class Export(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=50)
-    display_labels = models.BooleanField(default=True)
     model = models.ForeignKey(ContentType)
-    export_format = models.ForeignKey(Format, blank=True, null=True)
+    export_format = models.ForeignKey(
+            Format,
+            blank=True,
+            null=True,
+            help_text=_(u"Leave empty to display as HTML"))
 
     def __unicode__(self):
         return self.name
