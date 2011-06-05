@@ -4,25 +4,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from data_exports.models import Export, Column, Format
-from data_exports.forms import ColumnForm
-from django.forms.models import BaseInlineFormSet
-from inspect_model import InspectModel
-
-
-class ColumnFormSet(BaseInlineFormSet):
-    def add_fields(self, form, index):
-        """Filter the form's column choices
-
-        This is done at the formset level as there's no other way i could find
-        to get the parent object (stored in self.instance), and the form at the
-        same time.
-
-        """
-        super(ColumnFormSet, self).add_fields(form, index)
-        model = self.instance.model.model_class()
-        im = InspectModel(model)
-        columns = [(i, i) for i in im.items]
-        form.fields['column'].choices = columns
+from data_exports.forms import ColumnForm, ColumnFormSet
 
 
 class ColumnInline(admin.TabularInline):

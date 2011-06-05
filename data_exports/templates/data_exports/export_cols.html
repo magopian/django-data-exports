@@ -1,0 +1,18 @@
+{% extends "data_exports/base.html" %}
+{% load i18n %}
+
+{% block body %}
+<h1>{% blocktrans with export.model as model %}{{ export }}: export for model '{{ model }}'{% endblocktrans %}</h1>
+<form method="post" action="">{% csrf_token %}
+
+    <table>
+        {{ form }}
+    </table>
+
+    <h2>{% trans "Manage export' columns" %}</h2>
+    <table>
+        {{ formset }}
+    </table>
+    <input type="submit" value="{% trans "Update export" %}" />
+</form>
+{% endblock body %}

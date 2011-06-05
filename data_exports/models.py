@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.contenttypes.models import ContentType
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -33,16 +34,15 @@ class Export(models.Model):
     def __unicode__(self):
         return self.name
 
-    @models.permalink
     def get_absolute_url(self):
-        return ('data_exports:export_view', [], {'slug': self.slug})
+        return reverse('data_exports:export_view', kwargs={'slug': self.slug})
 
 
 class Column(models.Model):
     export = models.ForeignKey(Export)
     column = models.CharField(max_length=255)
     label = models.CharField(max_length=50, blank=True)
-    order = models.PositiveIntegerField(default=0)
+    order = models.PositiveIntegerField()
 
 
     class Meta:

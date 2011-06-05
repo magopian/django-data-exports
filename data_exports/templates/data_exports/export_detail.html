@@ -1,9 +1,10 @@
 {% extends "data_exports/base.html" %}
-{% load getter_tags %}
+{% load i18n getter_tags %}
 
 {% block body %}
 <h1>{{ export }}</h1>
 
+{% if export.column_set.exists %}
 <table>
     <thead>
         <tr>
@@ -22,4 +23,7 @@
     {% endfor %}
     </tbody>
 </table>
+{% else %}
+{% trans "No columns where defined for this export, so there's no data to display" %}
+{% endif %}
 {% endblock body %}

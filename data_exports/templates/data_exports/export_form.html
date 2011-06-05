@@ -1,0 +1,11 @@
+{% extends "data_exports/base.html" %}
+{% load i18n %}
+
+{% block body %}
+<form method="post" action="">{% csrf_token %}
+    <table>
+        {{ form }}
+    </table>
+    <input type="submit" value="{% trans "Create export" %}" />
+</form>
+{% endblock body %}
