@@ -18,7 +18,7 @@ setup(
     long_description=open('README.rst').read(),
     install_requires=[
         'Django>=1.3',
-        'django-model-inspect',
+        'django-inspect-model',
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
