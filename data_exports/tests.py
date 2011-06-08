@@ -133,7 +133,6 @@ class AdminTest(TestCase):
                 'model': ct.pk,
                 '_save': 'Save',
                 })
-        print resp
         # when creating, "save" is equivalent to "save and continue editing"
         self.assertRedirects(resp,
                              reverse('admin:data_exports_export_change',
