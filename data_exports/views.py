@@ -45,6 +45,7 @@ class ExportAdd(CreateView):
                        kwargs={'slug': self.object.slug})
 export_add = login_required(ExportAdd.as_view())
 
+
 class ExportCols(UpdateView):
     column_inline = inlineformset_factory(Export,
                                           Column,

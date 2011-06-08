@@ -9,10 +9,9 @@ from django.utils.translation import ugettext_lazy as _
 
 class Format(models.Model):
     name = models.CharField(max_length=50)
-    file_ext = models.CharField( max_length=10, blank=True)
+    file_ext = models.CharField(max_length=10, blank=True)
     mime = models.CharField(max_length=50)
     template = models.CharField(max_length=255)
-
 
     class Meta:
         ordering = ['name']
@@ -43,7 +42,6 @@ class Column(models.Model):
     column = models.CharField(max_length=255)
     label = models.CharField(max_length=50, blank=True)
     order = models.PositiveIntegerField()
-
 
     class Meta:
         ordering = ['order']

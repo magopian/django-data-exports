@@ -6,12 +6,14 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
 from django.forms.models import inlineformset_factory
 from django.test import TestCase
+from data_exports.templatetags import getter_tags as ttags
 from data_exports.models import Format, Export, Column
-from data_exports.forms import ColumnForm, ColumnFormSet
+from data_exports.forms import ColumnForm, ColumnFormSet, get_choices
 from inspect_model import InspectModel
 
 
 class ExportTest(TestCase):
+
     def setUp(self):
         # create an export of the Export model (inception !)
         ct = ContentType.objects.get(app_label='data_exports', model='export')
@@ -34,6 +36,13 @@ class ExportTest(TestCase):
         user.save()
 
     def test_column_choices(self):
+        """Choices computed for the exported model
+
+        When using the ColumnFormSet and the ColumnForm, all the accessible
+        items (fields, relations, methods, attributes...) from the exported
+        model are present in the "column" form field choices
+
+        """
         ColumnInlineFormSet = inlineformset_factory(Export,
                                                     Column,
                                                     form=ColumnForm,
@@ -43,25 +52,33 @@ class ExportTest(TestCase):
         form = formset.forms[0]
         self.assertTrue(hasattr(form.fields['column'], 'choices'))
         # all the table items are in the column field choices
-        choices = form.fields['column'].choices
-        self.assertTrue(all([(i, i) in choices for i in self.im.items]))
+        self.choices = form.fields['column'].choices
+        self.assertTrue(all([(i, i) in self.choices for i in self.im.items]))
+        # and all the related tables items are in the fields choices
+        # export has a FK to Format named 'export_format'
+        im_format = ['export_format.%s' % i
+                     for i in InspectModel(Format).items]
+        self.assertTrue(all([(i, i) in self.choices for i in im_format]))
+        # export has a FK to ContentType named 'model'
+        im_ct = ['model.%s' % i for i in InspectModel(ContentType).items]
+        self.assertTrue(all([(i, i) in self.choices for i in im_ct]))
 
-    def test_export_html(self):
+    def test_export_without_format(self):
+        """Export without a format renders to a simple template"""
         self.client.login(username='admin', password='admin')
-
         # empty export
         resp = self.client.get(reverse('data_exports:export_view',
-                                kwargs={'slug': self.empty_export.slug}))
+                               kwargs={'slug': self.empty_export.slug}))
         self.assertContains(resp, 'No columns where defined')
-
         # full export
         resp = self.client.get(reverse('data_exports:export_view',
-                                kwargs={'slug': self.export.slug}))
+                               kwargs={'slug': self.export.slug}))
         self.assertNotContains(resp, 'No columns where defined')
         for c in self.export.column_set.all():
             self.assertContains(resp, c.label if c.label else c)
 
-    def test_export_csv(self):
+    def test_export_with_format(self):
+        """Export with a format gives a file download"""
         # create a format for a "naive csv export"
         csv_format = Format.objects.create(
                 name='naive csv',
@@ -81,7 +98,26 @@ class ExportTest(TestCase):
                                 self.export.slug,
                                 self.export.export_format.file_ext))
 
+    def test_export_templatetag(self):
+        """Templatetags provided for convenience"""
+        # getattribute
+        self.assertEqual(ttags.getattribute(self.export, 'model'),
+                         getattr(self.export, 'model'))
+        # getvalue
+        d = {'foo': 'bar'}
+        self.assertEqual(ttags.getvalue(d, 'foo'), d.get('foo'))
+        # nice_display: displays a list for FK and ManyToMany
+        column_list = ttags.nice_display(self.export.column_set).split(', ')
+        for c in self.export.column_set.all():
+            self.assertTrue(unicode(c) in column_list)
+        # make sure getattribute and nice_display work on all choices
+        for c, name in get_choices(Export):
+            e = ttags.getattribute(self.export, c)
+            ttags.nice_display(e)
+
+
 class AdminTest(TestCase):
+
     def setUp(self):
         user = User.objects.create_user('admin', 'admin@admin.com', 'admin')
         user.is_staff = True

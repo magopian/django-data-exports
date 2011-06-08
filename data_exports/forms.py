@@ -7,6 +7,7 @@ from inspect_model import InspectModel
 
 
 class ExportForm(forms.ModelForm):
+
     class Meta:
         model = Export
 
@@ -26,6 +27,7 @@ class ColumnForm(forms.ModelForm):
 
 
 class ColumnFormSet(forms.models.BaseInlineFormSet):
+
     def add_fields(self, form, index):
         """Filter the form's column choices
 
@@ -36,6 +38,22 @@ class ColumnFormSet(forms.models.BaseInlineFormSet):
         """
         super(ColumnFormSet, self).add_fields(form, index)
         model = self.instance.model.model_class()
-        im = InspectModel(model)
-        columns = [(i, i) for i in im.items]
-        form.fields['column'].choices = [(u'', '---------')] + columns
+        choices = get_choices(model)
+        form.fields['column'].choices = [(u'', '---------')] + choices
+
+
+def get_choices(model, prefixes=[]):
+    choices = []
+    prefix = '.'.join(prefixes)
+    if prefix:
+        prefix = '%s.' % prefix
+    im = InspectModel(model)
+    items = ['%s%s' % (prefix, i) for i in im.items]
+    choices += zip(items, items)
+    for f in im.relation_fields:
+        related_model = getattr(model, f).field.rel.to
+        if f in prefixes: # we already went through this model
+            return [] # end of recursion
+        new_prefixes = prefixes + [f]
+        choices += get_choices(related_model, prefixes=new_prefixes)
+    return choices

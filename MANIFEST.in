@@ -1,1 +1,2 @@
 include README.rst LICENCE
+recursive-include data_exports *.html

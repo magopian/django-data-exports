@@ -25,7 +25,9 @@ Requirements
 ------------
 
 * Django >= 1.3: ``django-data-exports`` makes use of class based views
-* django-inspect-model: this app is used to populate column names from the model to be exported
+* `django-inspect-model`_: this app is used to populate column names from the model to be exported
+
+.. _django-inspect-model: http://readthedocs.org/docs/django-inspect-model/
 
 Installation
 ------------
@@ -91,6 +93,68 @@ There's three included example views:
 
 There is, at the moment, no example view for the export formats.
 
+Export columns
+~~~~~~~~~~~~~~
+
+Column choices make use of `django-inspect-model`_ to build the list of accessible "items". Please check this app's documentation to know more about "items".
+
+Choices are built by ``data_exports.forms.get_choices``, and will consist of all the accessible items on the exported model, and on all its related models. The only related fields accessible are those on models that are directly related, using forward or reverse OneToOne fields and forward ForeignKey fields.
+
+*Example*: 
+
+::
+
+    class Foo(models.Model):
+        name = CharField(max_length=50)
+        bar = ForeignKey(Bar)
+
+    class Bar(models.Model):
+        name = CharField(max_length=50)
+
+An export of ``Foo`` will have the following column choices:
+
+* ``name``: Foo.name
+* ``bar``: Foo.bar, which is unicode(Foo.bar)
+* ``bar.name``: Bar.name
+
+To display the value of those columns, the included templates use ``data_exports.templatetags.getter_tags``:
+
+Getattribute filter
+~~~~~~~~~~~~~~~~~~~
+
+::
+
+    {% load getter_tags %}
+    {{ obj|getattribute:column }}
+
+This is roughly equivalent to the ``getattr`` python builtin, but can cope with column choices:
+
+* if ``column`` doesn't have a dot, return ``getattr(obj, column)``, or ``getattr(obj, column)()`` if it's a callable
+* if ``column`` does have a dots (eg: ``bar.name``), recursively call ``getattribute()`` to get to the final attribute:
+
+::
+
+    attr = getattribute(obj, 'bar.name')
+    # equivalent to:
+    temp = getattr(obj, 'bar')
+    attr = getattr(temp, 'name')
+
+Nice_display filter
+~~~~~~~~~~~~~~~~~~~
+
+::
+
+    {% load getter_tags %}
+    {{ obj|getattribute:column|nice_display }}
+
+For now, all this does is return a comma-separated list of related instances for a many-to-many field.
+
+If the ``item`` field has an ``all`` method:
+
+::
+
+    return ', '.join(map(unicode, item.all()))
+
 Advanced usage
 --------------
 
@@ -145,6 +209,7 @@ There's three included templates:
 Changes
 -------
 
+* 0.2: fields on related models also available to exports
 * 0.1: initial version
 
 
