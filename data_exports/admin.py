@@ -31,6 +31,8 @@ class ExportAdmin(admin.ModelAdmin):
     def get_formsets(self, request, obj=None):
         if obj is None:
             return
+        if not hasattr(self, 'inline_instances'):
+            self.inline_instances = self.get_inline_instances(request)
         for inline in self.inline_instances:
             yield inline.get_formset(request, obj)
 
