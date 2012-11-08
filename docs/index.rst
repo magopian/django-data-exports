@@ -206,9 +206,36 @@ There's three included templates:
    :maxdepth: 2
 
 
+Contributing
+------------
+
+Get the code:
+
+::
+
+    git clone https://github.com/magopian/django-data-exports.git
+    cd django-data-export
+    virtualenv -p python2 env
+    source env/bin/activate
+    add2virtualenv .
+
+Install the development requirements:
+
+::
+
+    pip install -r test_requirements.txt
+
+Run the tests:
+
+::
+
+    DJANGO_SETTINGS_MODULE=data_exports.test_settings make test
+
+
 Changes
 -------
 
+* 0.3: compatible with django 1.4, download link in the admin
 * 0.2: fields on related models also available to exports
 * 0.1: initial version
 

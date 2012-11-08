@@ -81,22 +81,22 @@ class ExportTest(TestCase):
         """Export with a format gives a file download"""
         # create a format for a "naive csv export"
         csv_format = Format.objects.create(
-                name='naive csv',
-                file_ext='csv',
-                mime='text/csv',
-                template='data_exports/export_detail_csv.html')
+            name='naive csv',
+            file_ext='csv',
+            mime='text/csv',
+            template='data_exports/export_detail_csv.html')
 
         self.client.login(username='admin', password='admin')
 
         self.export.export_format = csv_format
         self.export.save()
         resp = self.client.get(reverse('data_exports:export_view',
-                                kwargs={'slug': self.export.slug}))
+                                       kwargs={'slug': self.export.slug}))
         self.assertEqual(resp['Content-Type'], self.export.export_format.mime)
         self.assertEqual(resp['Content-Disposition'],
                          'attachment; filename=%s.%s' % (
-                                self.export.slug,
-                                self.export.export_format.file_ext))
+                             self.export.slug,
+                             self.export.export_format.file_ext))
 
     def test_export_templatetag(self):
         """Templatetags provided for convenience"""
@@ -128,15 +128,14 @@ class AdminTest(TestCase):
         self.client.login(username='admin', password='admin')
         ct = ContentType.objects.get(app_label='data_exports', model='export')
         resp = self.client.post(reverse('admin:data_exports_export_add'), {
-                'name': 'test export',
-                'slug': 'test-export',
-                'model': ct.pk,
-                '_save': 'Save',
-                })
+            'name': 'test export',
+            'slug': 'test-export',
+            'model': ct.pk,
+            '_save': 'Save'})
         # when creating, "save" is equivalent to "save and continue editing"
         self.assertRedirects(resp,
                              reverse('admin:data_exports_export_change',
-                                     args=[1])) # first export created, id=1
+                                     args=[1]))  # first export created, id=1
 
         # once an export is created, it's no more possible to modify its model
         resp = self.client.get(reverse('admin:data_exports_export_change',

@@ -25,10 +25,10 @@ class Export(models.Model):
     slug = models.SlugField(max_length=50)
     model = models.ForeignKey(ContentType)
     export_format = models.ForeignKey(
-            Format,
-            blank=True,
-            null=True,
-            help_text=_(u"Leave empty to display as HTML"))
+        Format,
+        blank=True,
+        null=True,
+        help_text=_(u"Leave empty to display as HTML"))
 
     def __unicode__(self):
         return self.name
@@ -40,7 +40,7 @@ class Export(models.Model):
         if self.slug:
             return '<a href="%s">Download</a>' % self.get_absolute_url()
         else:
-            return 'Export not ready'
+            return _('Export not ready')
     get_export_link.allow_tags = True
 
 

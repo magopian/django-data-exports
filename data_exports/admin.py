@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
 from data_exports.models import Export, Column, Format
 from data_exports.forms import ColumnForm, ColumnFormSet
 
@@ -16,7 +15,8 @@ class ColumnInline(admin.TabularInline):
 
 class ExportAdmin(admin.ModelAdmin):
     inlines = [ColumnInline]
-    list_display = ['name', 'slug', 'model', 'export_format', 'get_export_link']
+    list_display = ['name', 'slug', 'model', 'export_format',
+                    'get_export_link']
     list_filter = ['export_format', 'model']
     prepopulated_fields = {"slug": ("name",)}
     readonly_fields = ['model']

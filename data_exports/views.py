@@ -58,7 +58,7 @@ class ExportCols(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(ExportCols, self).get_context_data(**kwargs)
         context['formset'] = self.column_inline(instance=self.object)
-        if hasattr(self, 'formset'): # formset was POSTed, but is invalid
+        if hasattr(self, 'formset'):  # formset was POSTed, but is invalid
             context['formset'] = self.formset
         return context
 

@@ -13,7 +13,7 @@ class ExportForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ExportForm, self).__init__(*args, **kwargs)
-        if self.instance: # don't allow modification of the model once created
+        if self.instance:  # don't allow modification of the model once created
             del self.fields['model']
 
 
@@ -52,8 +52,8 @@ def get_choices(model, prefixes=[]):
     choices += zip(items, items)
     for f in im.relation_fields:
         related_model = getattr(model, f).field.rel.to
-        if f in prefixes: # we already went through this model
-            return [] # end of recursion
+        if f in prefixes:  # we already went through this model
+            return []  # end of recursion
         new_prefixes = prefixes + [f]
         choices += get_choices(related_model, prefixes=new_prefixes)
     return choices
