@@ -36,6 +36,13 @@ class Export(models.Model):
     def get_absolute_url(self):
         return reverse('data_exports:export_view', kwargs={'slug': self.slug})
 
+    def get_export_link(self):
+        if self.slug:
+            return '<a href="%s">Download</a>' % self.get_absolute_url()
+        else:
+            return 'Export not ready'
+    get_export_link.allow_tags = True
+
 
 class Column(models.Model):
     export = models.ForeignKey(Export)
