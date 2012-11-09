@@ -8,7 +8,7 @@ env:
 before_install:
     - export DJANGO_SETTINGS_MODULE=data_exports.test_settings
 install:
-    - pip install Django=$DJANGO_VERSION
+    - pip install Django==$DJANGO_VERSION
     - pip install -r test_requirements.txt
 script:
     - django-admin.py test data_exports
