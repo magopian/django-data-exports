@@ -223,6 +223,7 @@ Install the development requirements:
 
 ::
 
+    pip install Django  # must be 1.3 or above
     pip install -r test_requirements.txt
 
 Run the tests:

@@ -1,5 +1,4 @@
 coverage
-Django>=1.3
-django-discover-runner
 django-inspect-model
 flake8
+tox

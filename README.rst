@@ -1,6 +1,10 @@
 Django-data-exports
 ===================
 
+.. image:: https://secure.travis-ci.org/magopian/django-data-export.png
+   :alt: Build Status
+   :target: https://secure.travis-ci.org/magopian/django-data-exports
+
 Django-data-exports is a model data exports app for Django. It allows you to easily
 create exports for your models.
 
@@ -37,6 +41,7 @@ Install the development requirements:
 
 ::
 
+    pip install Django  # must be 1.3 or above
     pip install -r test_requirements.txt
 
 Run the tests:

@@ -1,0 +1,5 @@
+django_data_exports.egg-info
+dist
+docs/_build
+.coverage
+.tox/
