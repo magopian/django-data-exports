@@ -1,7 +1,7 @@
 Django-data-exports
 ===================
 
-.. image:: https://secure.travis-ci.org/magopian/django-data-export.png
+.. image:: https://secure.travis-ci.org/magopian/django-data-exports.png
    :alt: Build Status
    :target: https://secure.travis-ci.org/magopian/django-data-exports
 
