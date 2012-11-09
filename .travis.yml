@@ -10,5 +10,6 @@ before_install:
 install:
     - pip install Django==$DJANGO_VERSION
     - pip install -r test_requirements.txt
+    - pip install -e .
 script:
     - django-admin.py test data_exports
