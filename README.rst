@@ -1,9 +1,9 @@
 Django-data-exports
 ===================
 
-.. image:: https://secure.travis-ci.org/magopian/django-data-exports.png
+.. image:: https://secure.travis-ci.org/magopian/django-data-exports.png?branch=master
    :alt: Build Status
-   :target: https://secure.travis-ci.org/magopian/django-data-exports
+   :target: https://travis-ci.org/magopian/django-data-exports
 
 * Author: Mathieu Agopian and contributors_
 * Licence: BSD
