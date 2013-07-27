@@ -1,13 +1,19 @@
 # -*- coding: utf-8 -*-
 from distutils.core import setup
+from os.path import abspath, dirname, join
 from setuptools import find_packages
 
-import data_exports
+
+def read_relative_file(filename):
+    """Returns contents of the given file, whose path is supposed relative
+    to this module."""
+    with open(join(dirname(abspath(__file__)), filename)) as f:
+        return f.read()
 
 
 setup(
     name='django-data-exports',
-    version=data_exports.__version__,
+    version=read_relative_file('VERSION').strip(),
     author=u'Mathieu agopian',
     author_email='mathieu.agopian@gmail.com',
     packages=find_packages(),
@@ -17,7 +23,7 @@ setup(
     description='Model data exports for Django',
     long_description=open('README.rst').read(),
     install_requires=[
-        'Django>=1.3',
+        'Django',
         'django-inspect-model',
     ],
     classifiers=[
@@ -28,6 +34,8 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
     ],
     zip_safe=False,
 )
