@@ -6,7 +6,10 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from data_exports.compat import python_2_unicode_compatible
 
+
+@python_2_unicode_compatible
 class Format(models.Model):
     name = models.CharField(max_length=50)
     file_ext = models.CharField(max_length=10, blank=True)
@@ -16,10 +19,11 @@ class Format(models.Model):
     class Meta:
         ordering = ['name']
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
+@python_2_unicode_compatible
 class Export(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=50)
@@ -30,7 +34,7 @@ class Export(models.Model):
         null=True,
         help_text=_(u"Leave empty to display as HTML"))
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_absolute_url(self):
@@ -44,6 +48,7 @@ class Export(models.Model):
     get_export_link.allow_tags = True
 
 
+@python_2_unicode_compatible
 class Column(models.Model):
     export = models.ForeignKey(Export)
     column = models.CharField(max_length=255)
@@ -53,5 +58,5 @@ class Column(models.Model):
     class Meta:
         ordering = ['order']
 
-    def __unicode__(self):
+    def __str__(self):
         return self.column

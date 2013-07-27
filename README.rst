@@ -5,6 +5,15 @@ Django-data-exports
    :alt: Build Status
    :target: https://secure.travis-ci.org/magopian/django-data-exports
 
+* Author: Mathieu Agopian and contributors_
+* Licence: BSD
+* Compatibility: Python 2.7, Python 3.3, Django 1.3+ (class-based-views required)
+* Requirements: django-inspect-model
+* Project URL: https://github.com/magopian/django-data-exports/
+* Documentation: http://django-data-exports.readthedocs.org/en/latest/
+
+.. _contributors: https://github.com/magopian/django-data-exports/contributors
+
 Django-data-exports is a model data exports app for Django. It allows you to easily
 create exports for your models.
 
@@ -14,14 +23,6 @@ and which format to use.
 
 Typical use case: display a few columns from one of your models as a HTML table to
 be easily copy/pasted to a spreadsheet.
-
-* Author: Mathieu Agopian and `contributors`_
-* Licence: BSD
-* Compatibility: Django 1.3+ (class-based-views required)
-* Requirements: django-inspect-model
-* Documentation: http://django-data-exports.readthedocs.org/en/latest/
-
-.. _contributors: https://github.com/magopian/django-data-exports/contributors
 
 
 Installation
@@ -96,7 +97,9 @@ There is, at the moment, no example view for the export formats.
 Export columns
 ~~~~~~~~~~~~~~
 
-Column choices make use of `django-inspect-model`_ to build the list of accessible "items". Please check this app's documentation to know more about "items".
+Column choices make use of django-inspect-model_ to build the list of accessible "items". Please check this app's documentation to know more about "items".
+
+.. _django-inspect-model: http://django-inspect-model.readthedocs.org/en/latest/
 
 Choices are built by ``data_exports.forms.get_choices``, and will consist of all the accessible items on the exported model, and on all its related models. The only related fields accessible are those on models that are directly related, using forward or reverse OneToOne fields and forward ForeignKey fields.
 
@@ -208,17 +211,18 @@ There's three included templates:
 * ``data_exports/export_detail_csv.html``: used by the "naive csv format" detailed in `Export formats`_.
 
 
-Contributing
-------------
+Hacking
+-------
 
-Get the code:
+Setup your environment:
 
 ::
 
     git clone https://github.com/magopian/django-data-exports.git
     cd django-data-export
 
-Hack and run the tests:
+Hack and run the tests using `Tox <https://pypi.python.org/pypi/tox>`_ to test
+on all the supported python and Django versions:
 
 ::
 

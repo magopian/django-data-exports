@@ -3,3 +3,8 @@ dist
 docs/_build
 .coverage
 .tox/
+
+# created by the Makefile: virtualenv
+bin/
+include/
+lib/

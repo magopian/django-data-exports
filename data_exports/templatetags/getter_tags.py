@@ -3,6 +3,8 @@
 
 from django import template
 
+from data_exports.compat import text_type
+
 
 register = template.Library()
 
@@ -43,5 +45,5 @@ def getvalue(dictionary, item):
 def nice_display(item):
     """Display a comma-separated list of models for M2M fields"""
     if hasattr(item, 'all'):  # RelatedManager: display a list
-        return ', '.join(map(unicode, item.all()))
+        return ', '.join(map(text_type, item.all()))
     return item

@@ -11,6 +11,8 @@ from data_exports.models import Format, Export, Column
 from data_exports.forms import ColumnForm, ColumnFormSet, get_choices
 from inspect_model import InspectModel
 
+from data_exports.compat import text_type
+
 
 class ExportTest(TestCase):
 
@@ -109,7 +111,7 @@ class ExportTest(TestCase):
         # nice_display: displays a list for FK and ManyToMany
         column_list = ttags.nice_display(self.export.column_set).split(', ')
         for c in self.export.column_set.all():
-            self.assertTrue(unicode(c) in column_list)
+            self.assertTrue(text_type(c) in column_list)
         # make sure getattribute and nice_display work on all choices
         for c, name in get_choices(Export):
             e = ttags.getattribute(self.export, c)
