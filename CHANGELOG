@@ -5,6 +5,7 @@ Changelog
 ----------------
 
   - fixes #3: Export's slug is now unique
+  - fixes #4: fix exports failing for models pointed to with a OneToOneField
 
 
 0.4 (2013-07-28)
