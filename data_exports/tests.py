@@ -4,6 +4,7 @@
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
+from django.db import IntegrityError
 from django.forms.models import inlineformset_factory
 from django.test import TestCase
 from data_exports.templatetags import getter_tags as ttags
@@ -36,6 +37,14 @@ class ExportTest(TestCase):
         user = User.objects.create_user('admin', 'admin@admin.com', 'admin')
         user.is_superuser = True
         user.save()
+
+    def test_slug(self):
+        """Make sure the slug is unique."""
+        with self.assertRaisesRegexp(IntegrityError,
+                                     "column slug is not unique"):
+            Export.objects.create(name='foo',
+                                  slug=self.empty_export.slug,
+                                  model=self.empty_export.model)
 
     def test_column_choices(self):
         """Choices computed for the exported model

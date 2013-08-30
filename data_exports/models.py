@@ -26,7 +26,7 @@ class Format(models.Model):
 @python_2_unicode_compatible
 class Export(models.Model):
     name = models.CharField(max_length=50)
-    slug = models.SlugField(max_length=50)
+    slug = models.SlugField(max_length=50, unique=True)
     model = models.ForeignKey(ContentType)
     export_format = models.ForeignKey(
         Format,

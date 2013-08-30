@@ -4,6 +4,8 @@ Changelog
 0.5 (unreleased)
 ----------------
 
+  - fixes #3: Export's slug is now unique
+
 
 0.4 (2013-07-28)
 ----------------
