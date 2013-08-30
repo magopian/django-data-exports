@@ -51,7 +51,11 @@ def get_choices(model, prefixes=[]):
     items = ['%s%s' % (prefix, i) for i in im.items]
     choices += zip(items, items)
     for f in im.relation_fields:
-        related_model = getattr(model, f).field.rel.to
+        related_field = getattr(model, f)
+        if hasattr(related_field, 'field'):  # ForeignKey
+            related_model = related_field.field.rel.to
+        else:
+            related_model = related_field.related.model
         if f in prefixes:  # we already went through this model
             return []  # end of recursion
         new_prefixes = prefixes + [f]

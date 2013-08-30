@@ -4,7 +4,7 @@
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.core.urlresolvers import reverse
-from django.db import IntegrityError
+from django.db import IntegrityError, models
 from django.forms.models import inlineformset_factory
 from django.test import TestCase
 from data_exports.templatetags import getter_tags as ttags
@@ -54,6 +54,21 @@ class ExportTest(TestCase):
         model are present in the "column" form field choices
 
         """
+        class OneToOneToExport(models.Model):
+            """Fake model.
+
+            Make sure that get_choices works with
+            SingleRelatedObjectDescriptor, as explained in ticket #4.
+
+            """
+            name = models.CharField(max_length=50)
+            o2o = models.OneToOneField(Export)
+
+        # reload the model's relations, to have the OneToOneToExport's relation
+        # taken into account
+        self.empty_export._meta._fill_related_objects_cache()
+        self.empty_export._meta.init_name_map()
+
         ColumnInlineFormSet = inlineformset_factory(Export,
                                                     Column,
                                                     form=ColumnForm,
@@ -62,17 +77,24 @@ class ExportTest(TestCase):
         # the column field has choices
         form = formset.forms[0]
         self.assertTrue(hasattr(form.fields['column'], 'choices'))
-        # all the table items are in the column field choices
-        self.choices = form.fields['column'].choices
-        self.assertTrue(all([(i, i) in self.choices for i in self.im.items]))
-        # and all the related tables items are in the fields choices
+        choices = form.fields['column'].choices
+        # all the model items are in the column field choices
+        self.assertTrue(all([(i, i) in choices for i in self.im.items]))
+        # and all the related model items are in the fields choices
         # export has a FK to Format named 'export_format'
         im_format = ['export_format.%s' % i
                      for i in InspectModel(Format).items]
-        self.assertTrue(all([(i, i) in self.choices for i in im_format]))
+        self.assertTrue(all([(i, i) in choices for i in im_format]))
         # export has a FK to ContentType named 'model'
         im_ct = ['model.%s' % i for i in InspectModel(ContentType).items]
-        self.assertTrue(all([(i, i) in self.choices for i in im_ct]))
+        self.assertTrue(all([(i, i) in choices for i in im_ct]))
+        # OneToOneToExport has a OneToOneField to ContentType named
+        # 'onetoonetoexport'
+        im_o2o = ['onetoonetoexport.%s' % i
+                  for i in InspectModel(OneToOneToExport).items]
+        self.assertTrue(all([(i, i) in choices for i in im_o2o]))
+        # revert changes to name_map:  'unload' the OneToOneToExport relation
+        del self.empty_export._meta._name_map['onetoonetoexport']
 
     def test_export_without_format(self):
         """Export without a format renders to a simple template"""
