@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from django.conf.urls.defaults import patterns, url
+try:
+    from django.conf.urls.defaults import patterns, url
+except ImportError:  # django 1.6 and above
+    from django.conf.urls import patterns, url
 from data_exports import views
 
 

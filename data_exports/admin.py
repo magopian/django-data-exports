@@ -1,9 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import django
 from django.contrib import admin
 from data_exports.models import Export, Column, Format
 from data_exports.forms import ColumnForm, ColumnFormSet
+
+
+POST_URL_CONTINUE = None
+if django.get_version() < '1.6':
+    POST_URL_CONTINUE = '../%s/'
 
 
 class ColumnInline(admin.TabularInline):
@@ -36,7 +42,7 @@ class ExportAdmin(admin.ModelAdmin):
         for inline in self.inline_instances:
             yield inline.get_formset(request, obj)
 
-    def response_add(self, request, obj, post_url_continue='../%s/'):
+    def response_add(self, request, obj, post_url_continue=POST_URL_CONTINUE):
         """If we're adding, save must be "save and continue editing"
 
         Two exceptions to that workflow:
