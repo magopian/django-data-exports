@@ -197,6 +197,38 @@ To use your own views, you need to use the same url names as in ``data_exports/u
 You can check the included example views in ``data_exports/views.py``, and of course reuse the forms provided in ``data_exports/forms.py``.
 
 
+Decorating the included views
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Say you need to decorate the export view with the ``staff_member_required``
+decorator:
+
+::
+
+    url(r'^export/(?P<slug>[^/]+)/?$',
+        staff_member_required(export_view),
+        name='export_view'),
+
+You still need to include this new url using a namespace, or the calls to
+``reverse`` in the views won't work. This is a way to do it (taken from the
+`Django documentation`_:
+
+::
+
+    from django.conf.urls import include, patterns, url
+
+    data_exports_patterns = patterns('',
+        url(r'^export/(?P<slug>[^/]+)/?$',
+            staff_member_required(export_view),
+            name='export_view'),
+    )
+
+    url(r'^exports', include(data_exports_patterns, namespace='data_exports')),
+
+.. _Django documentation:
+    https://docs.djangoproject.com/en/dev/topics/http/urls/#url-namespaces-and-included-urlconfs
+
+
 Using your own templates
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
