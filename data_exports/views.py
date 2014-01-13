@@ -16,7 +16,10 @@ class ExportView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ExportView, self).get_context_data(**kwargs)
         model = self.object.model.model_class()
-        context['data'] = model.objects.all()
+        qs = model.objects.all()
+        if hasattr(model, "export_queryset"):
+            qs = model.export_queryset(self.request)
+        context['data'] = qs
         return context
 
     def render_to_response(self, context, **kwargs):
