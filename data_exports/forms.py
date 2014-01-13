@@ -27,6 +27,10 @@ class ColumnForm(forms.ModelForm):
 
 
 class ColumnFormSet(forms.models.BaseInlineFormSet):
+    def __init__(self, *args, **kwargs):
+        super(ColumnFormSet, self).__init__(*args, **kwargs)
+        model = self.instance.model.model_class()
+        self.choices = [(u'', '---------')] + get_choices(model)
 
     def add_fields(self, form, index):
         """Filter the form's column choices
@@ -37,9 +41,7 @@ class ColumnFormSet(forms.models.BaseInlineFormSet):
 
         """
         super(ColumnFormSet, self).add_fields(form, index)
-        model = self.instance.model.model_class()
-        choices = get_choices(model)
-        form.fields['column'].choices = [(u'', '---------')] + choices
+        form.fields['column'].choices = self.choices
 
 
 def get_choices(model, prefixes=[]):
