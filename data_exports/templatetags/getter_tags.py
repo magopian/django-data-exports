@@ -22,7 +22,10 @@ def getattribute(model, item):
     """
     elements = item.split('.')
     element = elements.pop(0)
-    attr = getattr(model, element, None)
+    try:
+        attr = getattr(model, element, None)
+    except:
+        return
     if attr is None:  # end of recursion
         return
     if callable(attr):
