@@ -40,8 +40,7 @@ class ExportTest(TestCase):
 
     def test_slug(self):
         """Make sure the slug is unique."""
-        with self.assertRaisesRegexp(IntegrityError,
-                                     "column slug is not unique"):
+        with self.assertRaises(IntegrityError):
             Export.objects.create(name='foo',
                                   slug=self.empty_export.slug,
                                   model=self.empty_export.model)
