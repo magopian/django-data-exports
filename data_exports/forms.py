@@ -27,10 +27,12 @@ class ColumnForm(forms.ModelForm):
 
 
 class ColumnFormSet(forms.models.BaseInlineFormSet):
-    def __init__(self, *args, **kwargs):
-        super(ColumnFormSet, self).__init__(*args, **kwargs)
-        model = self.instance.model.model_class()
-        self.choices = [(u'', '---------')] + get_choices(model)
+    def get_choices(self):
+        # avoid multiple choices generation for django 1.6+
+        if not hasattr(self, "_choices"):
+            model = self.instance.model.model_class()
+            self._choices = [(u'', '---------')] + get_choices(model)
+        return self._choices
 
     def add_fields(self, form, index):
         """Filter the form's column choices
@@ -41,7 +43,7 @@ class ColumnFormSet(forms.models.BaseInlineFormSet):
 
         """
         super(ColumnFormSet, self).add_fields(form, index)
-        form.fields['column'].choices = self.choices
+        form.fields['column'].choices = self.get_choices()
 
 
 def get_choices(model, prefixes=[]):
