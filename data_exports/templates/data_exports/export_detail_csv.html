@@ -1,4 +1,4 @@
-{% load i18n getter_tags %}{% if export.column_set.exists %}{% for column in export.column_set.all %}{% if column.label %}{{ column.label }}{% else %}{{ column }}{% endif %};{% endfor %}
+﻿{% load i18n getter_tags %}{% if export.column_set.exists %}{% for column in export.column_set.all %}{% if column.label %}{{ column.label }}{% else %}{{ column }}{% endif %};{% endfor %}
 {% for obj in data %}{% for column in export.column_set.all %}"{{ obj|getattribute:column.column|nice_display }}";{% endfor %}
 {% endfor %}
 {% else %}
