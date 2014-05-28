@@ -188,6 +188,26 @@ The ``mime`` field is the ``Content-Type`` needed for the response. ``file_ext``
 
 If an export uses this format, visiting the export's view page ``/exports/<export slug>`` will offer a file download, named ``<export slug>.csv``.
 
+Filtering exports
+~~~~~~~~~~~~~~~~~
+
+To restrict entries access, you can use a class method or a static method ``export_queryset`` which will get the request object
+and returns the queryset of items to display.
+
+::
+
+    class ClientData(models.Model):
+        client = models.ForeignKey('Client')
+        address = models.CharField(max_length=255)
+        money_hidden_in_the_garden = models.IntegerField()
+        
+        @classmethod
+        def export_queryset(cls, request):
+            qs = cls.objects.all()
+            if not request.user.is_superuser:
+                qs = qs.filter(client__in=request.user.access_clients.all())
+            return qs
+
 
 Using your own views
 ~~~~~~~~~~~~~~~~~~~~
