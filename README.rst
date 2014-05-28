@@ -196,6 +196,14 @@ and returns the queryset of items to display.
 
 ::
 
+    from django.contrib.auth.models import User
+    from django.db import models
+    
+    class Client(models.Model):
+        name = models.CharField(max_length=63)
+        users = models.ManyToManyField(User)
+
+
     class ClientData(models.Model):
         client = models.ForeignKey('Client')
         address = models.CharField(max_length=255)
@@ -205,7 +213,7 @@ and returns the queryset of items to display.
         def export_queryset(cls, request):
             qs = cls.objects.all()
             if not request.user.is_superuser:
-                qs = qs.filter(client__in=request.user.access_clients.all())
+                qs = qs.filter(client__in=request.user.client_set.all())
             return qs
 
 
