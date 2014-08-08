@@ -10,6 +10,7 @@ class ExportForm(forms.ModelForm):
 
     class Meta:
         model = Export
+        exclude = ()
 
     def __init__(self, *args, **kwargs):
         super(ExportForm, self).__init__(*args, **kwargs)
@@ -24,6 +25,7 @@ class ColumnForm(forms.ModelForm):
 
     class Meta:
         model = Column
+        exclude = ()
 
 
 class ColumnFormSet(forms.models.BaseInlineFormSet):
