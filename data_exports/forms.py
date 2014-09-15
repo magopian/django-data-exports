@@ -10,6 +10,7 @@ class ExportForm(forms.ModelForm):
 
     class Meta:
         model = Export
+        exclude = ()
 
     def __init__(self, *args, **kwargs):
         super(ExportForm, self).__init__(*args, **kwargs)
@@ -24,9 +25,16 @@ class ColumnForm(forms.ModelForm):
 
     class Meta:
         model = Column
+        exclude = ()
 
 
 class ColumnFormSet(forms.models.BaseInlineFormSet):
+    def get_choices(self):
+        # avoid multiple choices generation for django 1.6+
+        if not hasattr(self, "_choices"):
+            model = self.instance.model.model_class()
+            self._choices = [(u'', '---------')] + get_choices(model)
+        return self._choices
 
     def add_fields(self, form, index):
         """Filter the form's column choices
@@ -37,9 +45,7 @@ class ColumnFormSet(forms.models.BaseInlineFormSet):
 
         """
         super(ColumnFormSet, self).add_fields(form, index)
-        model = self.instance.model.model_class()
-        choices = get_choices(model)
-        form.fields['column'].choices = [(u'', '---------')] + choices
+        form.fields['column'].choices = self.get_choices()
 
 
 def get_choices(model, prefixes=[]):
