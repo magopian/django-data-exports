@@ -52,7 +52,7 @@ class Export(models.Model):
 class Column(models.Model):
     export = models.ForeignKey(Export)
     column = models.CharField(max_length=255)
-    label = models.CharField(max_length=50, blank=True)
+    label = models.CharField(max_length=255, blank=True)
     order = models.PositiveIntegerField()
 
     class Meta:
