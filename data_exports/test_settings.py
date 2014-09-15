@@ -10,3 +10,10 @@ INSTALLED_APPS = [
 ]
 SECRET_KEY = "not really secret, is it?"
 ROOT_URLCONF = 'data_exports.test_urls'
+MIDDLEWARE_CLASSES = (
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+)

@@ -7,7 +7,7 @@ Django-data-exports
 
 * Author: Mathieu Agopian and contributors_
 * Licence: BSD
-* Compatibility: Python 2.7, Python 3.3, Django 1.3+ (class-based-views required)
+* Compatibility: Python 2.6, Python 2.7, Python 3.3, Python 3.4, Django 1.3+ (class-based-views required)
 * Requirements: django-inspect-model
 * Project URL: https://github.com/magopian/django-data-exports/
 * Documentation: http://django-data-exports.readthedocs.org/en/latest/
