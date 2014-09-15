@@ -1,12 +1,17 @@
 Changelog
 =========
 
+0.8 (unreleased)
+----------------
+
+
 0.7 (2014-09-15)
 ----------------
 
 * increased the length of `Column.label` to 255 chars (fixes #9)
 * now compatible with Django1.7
 * perf improvements, queryset filtering (fixes #7), thanks @Christophe31
+
 
 0.6 (2013-11-12)
 ----------------
@@ -25,6 +30,7 @@ Changelog
 ----------------
 
 * compatible python 3.3
+
 
 Older versions
 --------------
