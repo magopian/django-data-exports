@@ -1,27 +1,30 @@
 Changelog
 =========
 
-0.7 (unreleased)
+0.7 (2014-09-15)
 ----------------
 
+* increased the length of `Column.label` to 255 chars (fixes #9)
+* now compatible with Django1.7
+* perf improvements, queryset filtering (fixes #7), thanks @Christophe31
 
 0.6 (2013-11-12)
 ----------------
 
-  - fixes #5: compatibility with django 1.6
+* fixes #5: compatibility with django 1.6
 
 
 0.5 (2013-10-14)
 ----------------
 
-  - fixes #3: Export's slug is now unique
-  - fixes #4: fix exports failing for models pointed to with a OneToOneField
+* fixes #3: Export's slug is now unique
+* fixes #4: fix exports failing for models pointed to with a OneToOneField
 
 
 0.4 (2013-07-28)
 ----------------
 
-  - compatible python 3.3
+* compatible python 3.3
 
 Older versions
 --------------
