@@ -3,6 +3,7 @@ dist
 docs/_build
 .coverage
 .tox/
+*.pyc
 
 # created by the Makefile: virtualenv
 bin/
