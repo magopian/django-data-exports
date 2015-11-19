@@ -42,6 +42,7 @@ export_view = login_required(ExportView.as_view())
 
 class ExportAdd(CreateView):
     model = Export
+    fields = "__all__"
 
     def get_success_url(self):
         return reverse('data_exports:export_cols',
