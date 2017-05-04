@@ -30,6 +30,7 @@ class Export(models.Model):
     model = models.ForeignKey(ContentType)
     export_format = models.ForeignKey(
         Format,
+        on_delete=models.CASCADE,
         blank=True,
         null=True,
         help_text=_(u"Leave empty to display as HTML"))
@@ -50,7 +51,7 @@ class Export(models.Model):
 
 @python_2_unicode_compatible
 class Column(models.Model):
-    export = models.ForeignKey(Export)
+    export = models.ForeignKey(Export, on_delete=models.CASCADE)
     column = models.CharField(max_length=255)
     label = models.CharField(max_length=255, blank=True)
     order = models.PositiveIntegerField()
