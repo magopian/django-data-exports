@@ -52,19 +52,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='export',
             name='export_format',
-            field=models.ForeignKey(blank=True, to='data_exports.Format', help_text='Leave empty to display as HTML', null=True),
+            field=models.ForeignKey(on_delete=models.CASCADE, blank=True, to='data_exports.Format', help_text='Leave empty to display as HTML', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='export',
             name='model',
-            field=models.ForeignKey(to='contenttypes.ContentType'),
+            field=models.ForeignKey(on_delete=models.CASCADE, to='contenttypes.ContentType'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='column',
             name='export',
-            field=models.ForeignKey(to='data_exports.Export'),
+            field=models.ForeignKey(on_delete=models.CASCADE, to='data_exports.Export'),
             preserve_default=True,
         ),
     ]
