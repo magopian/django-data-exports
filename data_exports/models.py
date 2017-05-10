@@ -27,7 +27,7 @@ class Format(models.Model):
 class Export(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=50, unique=True)
-    model = models.ForeignKey(ContentType)
+    model = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     export_format = models.ForeignKey(
         Format,
         on_delete=models.CASCADE,
