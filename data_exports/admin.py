@@ -50,8 +50,8 @@ class ExportAdmin(admin.ModelAdmin):
         * We are adding a user in a popup
 
         """
-        if '_addanother' not in request.POST and '_popup' not in request.POST:
-            request.POST['_continue'] = 1
+        # if '_addanother' not in request.POST and '_popup' not in request.POST:
+        #    request.POST['_continue'] = 1
         return super(ExportAdmin, self).response_add(request,
                                                      obj,
                                                      post_url_continue)
