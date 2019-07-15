@@ -24,8 +24,8 @@ def update_fields(self):
                 self._add_item(name, self.relation_fields)
         else:  # relation, many or field from this model
             name = field.name
-            if field.rel:  # relation or many field
-                if hasattr(field.rel, 'through'):  # m2m
+            if field.related_model:  # relation or many field
+                if field.many_to_many:  # m2m
                     self._add_item(name, self.many_fields)
                 else:
                     self._add_item(name, self.relation_fields)
@@ -97,7 +97,7 @@ def get_choices(model, prefixes=[]):
     for f in im.relation_fields:
         related_field = getattr(model, f)
         if hasattr(related_field, 'field'):  # ForeignKey
-            related_model = related_field.field.rel.to
+            related_model = related_field.field.related_model
         else:
             related_model = related_field.related.model
         if f in prefixes:  # we already went through this model
