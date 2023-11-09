@@ -65,8 +65,12 @@ class ExportTest(TestCase):
 
         # reload the model's relations, to have the OneToOneToExport's relation
         # taken into account
-        self.empty_export._meta._fill_related_objects_cache()
-        self.empty_export._meta.init_name_map()
+        try:
+            self.empty_export._meta._fill_related_objects_cache()
+            self.empty_export._meta.init_name_map()
+        except:
+            self.empty_export._meta._expire_cache()
+            self.empty_export._meta._populate_directed_relation_graph()
 
         ColumnInlineFormSet = inlineformset_factory(Export,
                                                     Column,

@@ -5,17 +5,55 @@ from django import forms
 from data_exports.models import Export, Column
 from inspect_model import InspectModel
 
+#####################################################################
+# Monkey Patch Inspect Model
+def update_fields(self):
+    self.fields = set()
+    self.relation_fields = set()
+    self.many_fields = set()
+    opts = getattr(self.model, '_meta', None)
+    if opts:
+        for field in opts.get_fields():
+            direct = not field.auto_created or field.concrete
+        if not direct:  # relation or many field from another model
+            name = field.get_accessor_name()
+            field = field.field
+            if field.rel.multiple:  # m2m or fk to this model
+                self._add_item(name, self.many_fields)
+            else:  # one to one
+                self._add_item(name, self.relation_fields)
+        else:  # relation, many or field from this model
+            name = field.name
+            if field.related_model:  # relation or many field
+                if field.many_to_many:  # m2m
+                    self._add_item(name, self.many_fields)
+                else:
+                    self._add_item(name, self.relation_fields)
+            else:  # standard field
+                self._add_item(name, self.fields)
+        try:
+            from django.contrib.contenttypes.generic import (
+                GenericForeignKey)
+            for f in opts.virtual_fields:
+                if isinstance(f, GenericForeignKey):
+                    self._add_item(f.name, self.relation_fields)
+        except ImportError:
+            pass
+
+
+InspectModel.update_fields = update_fields
+######################################################################
+
 
 class ExportForm(forms.ModelForm):
-
-    class Meta:
-        model = Export
-        exclude = ()
-
     def __init__(self, *args, **kwargs):
         super(ExportForm, self).__init__(*args, **kwargs)
         if self.instance:  # don't allow modification of the model once created
             del self.fields['model']
+
+    class Meta:
+        model = Export
+        exclude = ()
 
 
 class ColumnForm(forms.ModelForm):
@@ -59,7 +97,7 @@ def get_choices(model, prefixes=[]):
     for f in im.relation_fields:
         related_field = getattr(model, f)
         if hasattr(related_field, 'field'):  # ForeignKey
-            related_model = related_field.field.rel.to
+            related_model = related_field.field.related_model
         else:
             related_model = related_field.related.model
         if f in prefixes:  # we already went through this model

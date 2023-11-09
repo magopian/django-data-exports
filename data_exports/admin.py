@@ -34,13 +34,13 @@ class ExportAdmin(admin.ModelAdmin):
             return []
         return super(ExportAdmin, self).get_readonly_fields(request, obj)
 
-    def get_formsets(self, request, obj=None):
+    def get_formsets_with_inlines(self, request, obj=None):
         if obj is None:
             return
         if not hasattr(self, 'inline_instances'):
             self.inline_instances = self.get_inline_instances(request)
         for inline in self.inline_instances:
-            yield inline.get_formset(request, obj)
+            yield inline.get_formset(request, obj), inline
 
     def response_add(self, request, obj, post_url_continue=POST_URL_CONTINUE):
         """If we're adding, save must be "save and continue editing"
@@ -50,8 +50,8 @@ class ExportAdmin(admin.ModelAdmin):
         * We are adding a user in a popup
 
         """
-        if '_addanother' not in request.POST and '_popup' not in request.POST:
-            request.POST['_continue'] = 1
+        # if '_addanother' not in request.POST and '_popup' not in request.POST:
+        #    request.POST['_continue'] = 1
         return super(ExportAdmin, self).response_add(request,
                                                      obj,
                                                      post_url_continue)

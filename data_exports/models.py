@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.contenttypes.models import ContentType
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -27,9 +27,10 @@ class Format(models.Model):
 class Export(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=50, unique=True)
-    model = models.ForeignKey(ContentType)
+    model = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     export_format = models.ForeignKey(
         Format,
+        on_delete=models.CASCADE,
         blank=True,
         null=True,
         help_text=_(u"Leave empty to display as HTML"))
@@ -50,7 +51,7 @@ class Export(models.Model):
 
 @python_2_unicode_compatible
 class Column(models.Model):
-    export = models.ForeignKey(Export)
+    export = models.ForeignKey(Export, on_delete=models.CASCADE)
     column = models.CharField(max_length=255)
     label = models.CharField(max_length=255, blank=True)
     order = models.PositiveIntegerField()

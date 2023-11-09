@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.forms.models import inlineformset_factory
 from django.views.generic import DetailView
 from django.views.generic import CreateView, UpdateView
@@ -19,6 +19,13 @@ class ExportView(DetailView):
         qs = model.objects.all()
         if hasattr(model, "export_queryset"):
             qs = model.export_queryset(self.request)
+        # Enable support for: https://github.com/Christophe31/django_for_user
+        if hasattr(qs, "for_user"):
+            qs = qs.for_user(
+                self.request.user,
+                request=self.request,
+                data_export=True,
+                **kwargs)
         context['data'] = qs
         return context
 
@@ -42,6 +49,7 @@ export_view = login_required(ExportView.as_view())
 
 class ExportAdd(CreateView):
     model = Export
+    fields = "__all__"
 
     def get_success_url(self):
         return reverse('data_exports:export_cols',
